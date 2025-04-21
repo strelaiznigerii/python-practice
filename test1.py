@@ -84,25 +84,32 @@ class Library:
         self.books.append(book)
 
     def list_available_books(self) -> list:
-        available_books = list()
-        available_books.clear()
+        available_books = []
         for book in self.books:
-            if book.is_checked_out == False:
-                available_books.append(book)
+            if not book.is_checked_out:
+                available_books.append(str(book))
+        print(available_books)
         return available_books
+
     
     def checkout_book(self, title: str) -> None:
+        count_checked_books = 0
+
         for book in self.books:
-            if book.title in self.books and book.is_checked_out == False:
+            if book.title == title and book.is_checked_out == False:
                 book.is_checked_out = True
-        
+                count_checked_books += 1
+                return f'Книга {book.title} выдана'
+
+        if count_checked_books == 0:
+            return 'Книги сейчас нет в библиотеке'         
     
     def __str__(self) -> str:
-        list_available_books = list()
-        for book in self.list_available_books():
-            list_available_books.append(str(book))
-        list_available_books = '\n'.join(list_available_books)
-        return list_available_books
+        list_available_books = [str(book) for book in self.list_available_books()]
+        if not list_available_books:
+            return 'Нет доступных книг.'
+        return '\n'.join(list_available_books)
+
 
 class User:
 
@@ -134,7 +141,10 @@ if __name__ == "__main__":
     l1.add_book(b1)
     l1.add_book(b2)
     print(l1)
+    print(l1.checkout_book('Братья Карамазовы'))
 
+    print(l1.list_available_books())
+    # print(str(b1))
     # u = User('User1')
     # print(User.name)
 
