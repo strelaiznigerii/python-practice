@@ -84,10 +84,12 @@ class Library:
         self.books.append(book)
 
     def list_available_books(self) -> list:
+        available_books = list()
+        available_books.clear()
         for book in self.books:
             if book.is_checked_out == False:
-                self.available_books.append(book)
-        return self.available_books
+                available_books.append(book)
+        return available_books
     
     def checkout_book(self, title: str) -> None:
         for book in self.books:
@@ -95,9 +97,12 @@ class Library:
                 book.is_checked_out = True
         
     
-    # def __str__(self) -> str:
-    #     for book in self.available_books:
-    #         return f'{book}'
+    def __str__(self) -> str:
+        list_available_books = list()
+        for book in self.list_available_books():
+            list_available_books.append(str(book))
+        list_available_books = '\n'.join(list_available_books)
+        return list_available_books
 
 class User:
 
@@ -128,8 +133,8 @@ if __name__ == "__main__":
     l1 = Library()
     l1.add_book(b1)
     l1.add_book(b2)
-    print(l1.list_available_books())
+    print(l1)
 
-    u = User('User1')
-    print(User.name)
+    # u = User('User1')
+    # print(User.name)
 
