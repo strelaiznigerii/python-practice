@@ -1,3 +1,58 @@
+"""
+🔹 Задача: Мини-библиотека
+
+Создай три класса:
+1. Book
+
+Представляет книгу.
+
+Атрибуты:
+
+    title (название)
+
+    author (автор)
+
+    year (год издания)
+
+    is_checked_out (флаг, выдана ли книга; по умолчанию — False)
+
+Методы:
+
+    __str__: возвращает строку вида "Название: ..., Автор: ..., Год: ..., В наличии: да/нет"
+
+2. Library
+
+Представляет библиотеку, в которой хранятся книги.
+
+Атрибуты:
+
+    books — список объектов Book
+
+Методы:
+
+    add_book(book: Book) — добавляет книгу в библиотеку.
+
+    list_available_books() — возвращает список только доступных книг.
+
+    checkout_book(title: str) — "выдаёт" книгу (меняет is_checked_out на True, если книга есть и не выдана).
+
+3. User
+
+Представляет пользователя, который может брать книги.
+
+Атрибуты:
+
+    name
+
+    borrowed_books — список книг, взятых этим пользователем.
+
+Методы:
+
+    borrow_book(library: Library, title: str) — пытается взять книгу из библиотеки.
+
+    list_borrowed_books() — список всех взятых книг.
+"""
+
 class Book:
     
     def __init__(
@@ -25,9 +80,6 @@ class Library:
         self.books = list()
         self.available_books = list()
 
-    # def __str__(self) -> str:
-    #     return '\n'.join(self.books)
-
     def add_book(self, book: Book) -> None:
         self.books.append(book)
 
@@ -42,17 +94,29 @@ class Library:
             if book.title in self.books and book.is_checked_out == False:
                 book.is_checked_out = True
         
+    
+    # def __str__(self) -> str:
+    #     for book in self.available_books:
+    #         return f'{book}'
+
 class User:
-    def __init__(self, name: str, borrowed_books: list) -> None:
+
+    def __init__(self, name: str, borrowed_books: list=None) -> None:
         self.name = name
-        self.borrowed_books = borrowed_books
+        self.borrowed_books = borrowed_books if borrowed_books is not None else {}
     
     def borrow_book(self, library: Library, title: str) -> None:
-        if title in library.list_available_books():
-            pass
+        for book in library.list_available_books():
+            if book.title in library and book.is_checked_out == False:
+                self.borrowed_books.append(book)
+            else:
+                print('Вы не можете взять книгу')
 
     def list_borrowed_books(self) -> list:
-        pass
+        return self.borrowed_books
+    
+    def __str__(self) -> str:
+        return f'{self.borrowed_books}'
 
 
 if __name__ == "__main__":
@@ -65,4 +129,7 @@ if __name__ == "__main__":
     l1.add_book(b1)
     l1.add_book(b2)
     print(l1.list_available_books())
+
+    u = User('User1')
+    print(User.name)
 
