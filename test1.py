@@ -88,21 +88,18 @@ class Library:
         for book in self.books:
             if not book.is_checked_out:
                 available_books.append(str(book))
-        print(available_books)
         return available_books
 
     
     def checkout_book(self, title: str) -> None:
-        count_checked_books = 0
 
         for book in self.books:
-            if book.title == title and book.is_checked_out == False:
+            if book.title == title and not book.is_checked_out:
                 book.is_checked_out = True
                 count_checked_books += 1
                 return f'Книга {book.title} выдана'
-
-        if count_checked_books == 0:
-            return 'Книги сейчас нет в библиотеке'         
+            
+        return 'Книги сейчас нет в библиотеке'         
     
     def __str__(self) -> str:
         list_available_books = [str(book) for book in self.list_available_books()]
@@ -115,36 +112,63 @@ class User:
 
     def __init__(self, name: str, borrowed_books: list=None) -> None:
         self.name = name
-        self.borrowed_books = borrowed_books if borrowed_books is not None else {}
+        self.borrowed_books = borrowed_books if borrowed_books is not None else []
     
     def borrow_book(self, library: Library, title: str) -> None:
         for book in library.list_available_books():
-            if book.title in library and book.is_checked_out == False:
-                self.borrowed_books.append(book)
-            else:
-                print('Вы не можете взять книгу')
+            if book.title == title:
+                if book in self.borrowed_books:
+                    return 'Вы уже взяли эту книгу'
+                self.borrowed_books.append(book)    
+                library.checkout_book(title)
+                return 'Книга выдана'
+        return 'Нет доступных книг с таким названием'
 
     def list_borrowed_books(self) -> list:
-        return self.borrowed_books
+        borrowed_books = []
+        for book in self.borrowed_books:
+            borrowed_books.append(str(book))
+        return borrowed_books
     
     def __str__(self) -> str:
-        return f'{self.borrowed_books}'
+        if not self.borrowed_books:
+            return 'Вы не брали книги в библиотеке'
+        return '\n'.join([str(book) for book in self.borrowed_books])            
 
+def test_library_system():
+    book1 = Book("Братья Карамазовы", "Федор Достоевский", 1880)
+    book2 = Book("Идиот", "Федор Достоевский", 1869)
+    book3 = Book("Мастер и Маргарита", "Михаил Булгаков", 1967)
+
+    library = Library()
+    library.add_book(book1)
+    library.add_book(book2)
+    library.add_book(book3)
+
+    print("Доступные книги в библиотеке:")
+    print(library.list_available_books())
+
+    user = User("User")
+
+    print("\nПользователь пытается взять книгу 'Идиот':")
+    print(user.borrow_book(library, "Идиот")) 
+    print(user.list_borrowed_books())
+
+    print("\nДоступные книги после того, как пользователь взял книгу:")
+    print(library.list_available_books())
+
+    print("\nПользователь пытается взять книгу 'Преступление и наказание':")
+    print(user.borrow_book(library, "Преступление и наказание"))  
+    print(user.list_borrowed_books)
+
+    print("\nПользователь пытается взять книгу 'Идиот' второй раз:")
+    print(user.borrow_book(library, "Идиот"))  
+    print(user.list_borrowed_books())
+
+    print("\nСписок всех взятых книг пользователем:")
+    print(user.list_borrowed_books())
 
 if __name__ == "__main__":
-    b1 = Book('Братья Карамазовы', 'Ф. М. Достоевский', 1867)
-    print(b1)
-    b2 = Book('Идиот', 'Ф. М. Достоевский', 1867)
-    print(b2)
-    
-    l1 = Library()
-    l1.add_book(b1)
-    l1.add_book(b2)
-    print(l1)
-    print(l1.checkout_book('Братья Карамазовы'))
+    test_library_system()
 
-    print(l1.list_available_books())
-    # print(str(b1))
-    # u = User('User1')
-    # print(User.name)
 
