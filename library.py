@@ -159,9 +159,8 @@ def test_library_system():
 
     print("\nПользователь пытается взять книгу 'Преступление и наказание':")
     print(user.borrow_book(library, "Преступление и наказание"))  
-    print(user.list_borrowed_books)
+    print(user.list_borrowed_books())
 
-    print("\nПользователь пытается взять книгу 'Идиот' второй раз:")
     print(user.borrow_book(library, "Идиот"))  
     print(user.list_borrowed_books())
 
