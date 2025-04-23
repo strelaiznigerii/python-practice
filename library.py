@@ -118,10 +118,7 @@ class User:
 
 
     def list_borrowed_books(self) -> list:
-        borrowed_books = []
-        for book in self.borrowed_books:
-            borrowed_books.append(str(book))
-        return borrowed_books
+        return [str(book) for book in self.borrowed_books]
     
     def __str__(self) -> str:
         if not self.borrowed_books:
