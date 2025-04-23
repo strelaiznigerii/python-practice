@@ -83,7 +83,7 @@ class Library:
         self.books.append(book)
 
     def list_available_books(self) -> list:
-        return [book for book in self.books if not book.is_checked_out]
+        return [book for book in self.books if not book.is_checked_out] # TODO: Watch
 
     
     def checkout_book(self, title: str) -> bool:
