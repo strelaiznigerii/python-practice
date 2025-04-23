@@ -68,7 +68,7 @@ class Book:
         self.is_checked_out = is_checked_out
     
     def __str__(self) -> str:
-        if self.is_checked_out == False:
+        if not self.is_checked_out:
             flag_checked_out = 'да'
         else:
             flag_checked_out = 'нет'
@@ -96,13 +96,12 @@ class Library:
         for book in self.books:
             if book.title == title and not book.is_checked_out:
                 book.is_checked_out = True
-                count_checked_books += 1
                 return f'Книга {book.title} выдана'
             
         return 'Книги сейчас нет в библиотеке'         
     
     def __str__(self) -> str:
-        list_available_books = [str(book) for book in self.list_available_books()]
+        list_available_books = [book for book in self.list_available_books()]
         if not list_available_books:
             return 'Нет доступных книг.'
         return '\n'.join(list_available_books)
