@@ -78,27 +78,20 @@ class Library:
     
     def __init__(self) -> None:
         self.books = list()
-        self.available_books = list()
 
     def add_book(self, book: Book) -> None:
         self.books.append(book)
 
     def list_available_books(self) -> list:
-        available_books = []
-        for book in self.books:
-            if not book.is_checked_out:
-                available_books.append(str(book))
-        return available_books
+        return [book for book in self.books if not book.is_checked_out]
 
     
-    def checkout_book(self, title: str) -> None:
-
+    def checkout_book(self, title: str) -> bool:
         for book in self.books:
             if book.title == title and not book.is_checked_out:
                 book.is_checked_out = True
-                return f'Книга {book.title} выдана'
-            
-        return 'Книги сейчас нет в библиотеке'         
+                return True
+        return False        
     
     def __str__(self) -> str:
         list_available_books = [book for book in self.list_available_books()]
@@ -118,10 +111,11 @@ class User:
             if book.title == title:
                 if book in self.borrowed_books:
                     return 'Вы уже взяли эту книгу'
-                self.borrowed_books.append(book)    
-                library.checkout_book(title)
+                self.borrowed_books.append(book)
+                book.is_checked_out = True
                 return 'Книга выдана'
         return 'Нет доступных книг с таким названием'
+
 
     def list_borrowed_books(self) -> list:
         borrowed_books = []
