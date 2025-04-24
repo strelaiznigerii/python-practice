@@ -1,6 +1,8 @@
 MN 23.04.2025
-ссылка на pull request
-3 задачи за неделю(до следующей встречи - минимум)
-ограничений по жесткости комментариев нет
-add a description - туда описание задачи закидывать
-закинуть в rep'у MN Readme.md
+[ ] - link to pull request
+[ ] - 3 tasks for week (min)
+[ ] - comments free
+[ ] - add a description - task's description
+[x] - add to repository MN readme.md
+
+Next meeting - 30.04.2025
