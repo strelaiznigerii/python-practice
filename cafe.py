@@ -8,12 +8,23 @@ class MenuItem:
     def __str__(self) -> str:
         return f'Название: {self.name}, Цена: {self.price} руб.'
 
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, MenuItem):
+            return NotImplemented
+        return self.name == other.name and self.price == other.price
+    
 class Order:
-    def __init__(self) -> None:
+    def __init__(self, cafe: "Cafe") -> None:
         self.items = list()
+        self.cafe = cafe
 
     def add_item(self, item: MenuItem) -> None:
-        self.items.append(item)
+        try:
+            if item not in self.cafe.menu:
+                raise ValueError('Такой позиции нет в меню')
+            self.items.append(item)
+        except ValueError as e:
+            raise ValueError(f'{e} нет в меню')
         
     def total_price(self) -> float:
         total_price = 0
@@ -32,9 +43,8 @@ class Cafe:
     def add_menu_item(self, item: MenuItem):
         self.menu.append(item)
 
-    @staticmethod
-    def create_order() -> Order:
-        return Order()
+    def create_order(self) -> Order:
+        return Order(self)
 
     def add_order(self, order: Order) -> None:
         self.orders.append(order)
@@ -56,7 +66,7 @@ def test_cafe():
     for item in cafe.list_menu():
         print(item)
 
-    order1 = Cafe.create_order()
+    order1 = cafe.create_order()
     order1.add_item(MenuItem('Шашлык', 100.00))
     order1.add_item(MenuItem('Чай', 30.00))
 
@@ -65,7 +75,8 @@ def test_cafe():
     print("\nСозданный заказ:")
     print(order1)
 
-    order2 = Cafe.create_order()
+    order2 = cafe.create_order()
+    order2.add_item(MenuItem('Люля-кебаб', 250.00))
     cafe.add_menu_item(MenuItem('Люля-кебаб', 250.00))
     
     order2.add_item(MenuItem('Суп', 50.00))
