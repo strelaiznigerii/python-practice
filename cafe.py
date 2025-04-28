@@ -11,7 +11,6 @@ class MenuItem:
             return False
         return True
 
-
     def __str__(self) -> str:
         return f'Название: {self.name}, Цена: {self.price} руб.'
 
