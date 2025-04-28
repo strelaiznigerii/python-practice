@@ -1,9 +1,16 @@
 class MenuItem:
     def __init__(self, name: str, price: float) -> None:
         self.name = name
-        if price <= 0:
-            raise ValueError('Цена не может быть отрицательной')
         self.price = price
+        self.valid = self.validate_price(price)
+   
+    @staticmethod    
+    def validate_price(price: float) -> bool:
+        if price <= 0:
+            print('Цена должна быть больше 0')
+            return False
+        return True
+
 
     def __str__(self) -> str:
         return f'Название: {self.name}, Цена: {self.price} руб.'
@@ -24,7 +31,7 @@ class Order:
                 raise ValueError('Такой позиции нет в меню')
             self.items.append(item)
         except ValueError as e:
-            raise ValueError(f'{e} нет в меню')
+            raise ValueError(e)
         
     def total_price(self) -> float:
         total_price = 0
@@ -41,7 +48,12 @@ class Cafe:
         self.orders = list()
 
     def add_menu_item(self, item: MenuItem):
-        self.menu.append(item)
+        try:
+            if not item.valid:
+                raise ValueError('Некорректная позиция')       
+            self.menu.append(item)
+        except ValueError as e:
+            print(e)
 
     def create_order(self) -> Order:
         return Order(self)
@@ -76,7 +88,8 @@ def test_cafe():
     print(order1)
 
     order2 = cafe.create_order()
-    order2.add_item(MenuItem('Люля-кебаб', 250.00))
+    # order2.add_item(MenuItem('Люля-кебаб', 250.00))
+    cafe.add_menu_item(MenuItem('Салфетка', -1.00))
     cafe.add_menu_item(MenuItem('Люля-кебаб', 250.00))
     
     order2.add_item(MenuItem('Суп', 50.00))
