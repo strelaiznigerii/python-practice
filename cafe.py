@@ -14,7 +14,7 @@ class MenuItem:
         self._price = price
 
     def __str__(self) -> str:
-        return f'Название: {self.name}, Цена: {self._price} руб.'
+        return f'Название: {self.name}, Цена: {self.price} руб.'
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MenuItem):
@@ -37,7 +37,7 @@ class Order:
     def total_price(self) -> float:
         total_price = 0
         for item in self.items:
-            total_price += item._price
+            total_price += item.price
         return total_price
     
     def __str__(self) -> str:
