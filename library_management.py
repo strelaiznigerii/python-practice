@@ -35,8 +35,8 @@ class Library:
             if book.title == title:
                 self.library.remove(book)
                 print(f'Книга {title} удалена')
-            else:
-                print(f'Книга {title} не найдена')
+                return
+        print(f'Книга {title} не найдена')
 
     def find_book(self, title: str) -> None:   
         for book in self.library:
@@ -49,6 +49,37 @@ class Library:
         
     def __str__(self) -> str:
         return '\n'.join(str(book) for book in self.list_books())        
+
+@dataclass
+class User:
+    name: str
+    borrowed_books: list = field(default_factory=list)
+
+    def borrow_book(self, library: Library, title: str) -> None:
+        for book in library.list_books():
+            if book.title == title:
+                if book in self.borrowed_books:               
+                    return f'Вы уже брали книгу {title}'
+                if not book.available:
+                    return f'Книгу {title} уже взяли'
+                self.borrowed_books.append(book)
+                book._available = False
+                return f'Книга {title} выдана'
+        return f'Книга {title} отсутствует в библиотеке'
+
+    def return_book(self, library: Library, title: str) -> None:
+        for book in library.list_books():
+            if book.title == title:
+                if book in self.borrowed_books:               
+                    self.borrowed_books.remove(book)
+                    book._available = True
+                    return f'Вы вернули книгу {title} в библиотеку'
+            else:
+                return f'Вы не брали книгу {title}'
+        return f'Книга {title} отсутствует в библиотеке'
+
+    def __str__(self) -> str:
+        return '\n'.join(str(book) for book in self.borrowed_books)
 
 b1 = Book('Братья Карамазовы', 'Ф. М. Достоевский', 1867)
 b2 = Book('Война и мир', 'Л. Н. Толстой', 1869)
@@ -75,4 +106,12 @@ except ValueError as e:
     print(e)
 
 library.remove_book('Архипелаг ГУЛАГ')
-print(f'\n{library}')
+print(f'\n{library}\n')
+
+user = User('Alex')
+print(user.borrow_book(library, 'Война и мир'))
+print('Список выданных книг:')
+print(user.borrowed_books)
+
+print(user.return_book(library, 'Война и мир'))
+print(user.borrowed_books)
