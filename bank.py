@@ -6,7 +6,7 @@ class BankAccount:
     _balance: int
     
     def __post_init__(self) -> None:
-        if len(self.name) < 5 or self.name[0].isdigit():
+        if len(self.name.strip()) < 5 or self.name[0].isdigit():
             raise ValueError('Имя должно быть не менее 5 знаков и не может начинаться с цифры')
 
     @property
@@ -20,23 +20,17 @@ class BankAccount:
         self._balance = balance
     
     def deposit(self, amount: int) -> None:
-        try:
-            if amount < 0:
-                raise ValueError('Пополнение не может быть отрицательным')
-            self._balance += amount
-        except ValueError as e:
-            print(e)
+        if amount < 0:
+            raise ValueError('Пополнение не может быть отрицательным')
+        self._balance += amount
 
     def withdraw(self, amount: int) -> None:
-        try:
-            if amount > self._balance:
-                raise ValueError('Нельзя снять больше, чем есть на балансе')
-            self._balance -= amount
-        except ValueError as e:
-            print(e)
+        if amount > self._balance:
+            raise ValueError('Нельзя снять больше, чем есть на балансе')
+        self._balance -= amount
 
     def __enter__(self) -> "BankAccount":
-        print('Счет разблокирован')
+        # print('Счет разблокирован')
         return self
 
     def __exit__(self, exc_type, exc_val, exc_cb) -> None:
@@ -47,7 +41,4 @@ if __name__ == '__main__':
         account.deposit(500)
         account.withdraw(200)
         account.withdraw(2000)  # Ошибка: недостаточно средств
-        try:
-            account.balance = -100  # Ошибка: баланс не может быть отрицательным
-        except ValueError:
-            print('Баланс не может быть отрицательным')
+        account.balance = -100  # Ошибка: баланс не может быть отрицательным
