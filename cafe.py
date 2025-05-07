@@ -23,7 +23,7 @@ class MenuItem:
     
 class Order:
     def __init__(self, cafe: "Cafe") -> None:
-        self.items = list()
+        self.items: list[MenuItem] = []
         self.cafe = cafe
 
     def add_item(self, item: MenuItem) -> None:
@@ -35,20 +35,17 @@ class Order:
             raise ValueError(e)
         
     def total_price(self) -> float:
-        total_price = 0
-        for item in self.items:
-            total_price += item.price
-        return total_price
+        return sum(item.price for item in self.items)
     
     def __str__(self) -> str:
         return '\n'.join([str(item) for item in self.items]) + f"\nИтого: {self.total_price()} руб." 
 
 class Cafe:
     def __init__(self) -> None:
-        self.menu = list()
-        self.orders = list()
-
-    def add_menu_item(self, item: MenuItem):
+        self.menu: list[MenuItem] = []
+        self.orders: list[Order] = [] 
+    
+    def add_menu_item(self, item: MenuItem) -> None:
         self.menu.append(item)
 
     def create_order(self) -> Order:
@@ -57,7 +54,7 @@ class Cafe:
     def add_order(self, order: Order) -> None:
         self.orders.append(order)
 
-    def list_menu(self) -> list:
+    def list_menu(self) -> list[str]:
         return [str(item) for item in self.menu]
     
     def __str__(self) -> str:
