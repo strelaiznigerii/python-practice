@@ -1,58 +1,3 @@
-"""
-🔹 Задача: Мини-библиотека
-
-Создай три класса:
-1. Book
-
-Представляет книгу.
-
-Атрибуты:
-
-    title (название)
-
-    author (автор)
-
-    year (год издания)
-
-    is_checked_out (флаг, выдана ли книга; по умолчанию — False)
-
-Методы:
-
-    __str__: возвращает строку вида "Название: ..., Автор: ..., Год: ..., В наличии: да/нет"
-
-2. Library
-
-Представляет библиотеку, в которой хранятся книги.
-
-Атрибуты:
-
-    books — список объектов Book
-
-Методы:
-
-    add_book(book: Book) — добавляет книгу в библиотеку.
-
-    list_available_books() — возвращает список только доступных книг.
-
-    checkout_book(title: str) — "выдаёт" книгу (меняет is_checked_out на True, если книга есть и не выдана).
-
-3. User
-
-Представляет пользователя, который может брать книги.
-
-Атрибуты:
-
-    name
-
-    borrowed_books — список книг, взятых этим пользователем.
-
-Методы:
-
-    borrow_book(library: Library, title: str) — пытается взять книгу из библиотеки.
-
-    list_borrowed_books() — список всех взятых книг.
-"""
-
 class Book:
     
     def __init__(
@@ -66,23 +11,20 @@ class Book:
         self.author = author
         self.year = year
         self.is_checked_out = is_checked_out
-    
+
     def __str__(self) -> str:
-        if not self.is_checked_out:
-            flag_checked_out = 'да'
-        else:
-            flag_checked_out = 'нет'
-        return f"Название: {self.title}, Автор: {self.author}, Год: {self.year}, В наличии: {flag_checked_out}"
+        return f"Название: {self.title}, Автор: {self.author}, Год: {self.year}, В наличии: {'да' if not self.is_checked_out else 'нет'}"
+    
         
 class Library:
     
     def __init__(self) -> None:
-        self.books = list()
+        self.books: list[Book] = []
 
     def add_book(self, book: Book) -> None:
         self.books.append(book)
 
-    def list_available_books(self) -> list:
+    def list_available_books(self) -> list[Book]:
         return [book for book in self.books if not book.is_checked_out]
     
     def checkout_book(self, title: str) -> bool:
@@ -101,17 +43,16 @@ class Library:
 
 class User:
 
-    def __init__(self, name: str, borrowed_books: list=None) -> None:
-        self.name = self.validate_name(name)
-        self.borrowed_books = borrowed_books if borrowed_books is not None else []
+    def __init__(self, name: str, borrowed_books: list | None=None) -> None:
+        if not self.validate_name(name):
+            raise ValueError("Имя пользователя должно быть не менее 4 знаков и не может начинаться с цифры.")
+        self.name = name
+        self.borrowed_books = borrowed_books or []
     
     @staticmethod
     def validate_name(name: str) -> bool:
-        if len(name) >= 4 and not name[0].isdigit():
-            print('Имя пользователя должно быть не менее 4 знаков и не может начинаться с цифры.')
-            return False
-        return True
-    
+        return len(name) >= 4 and not name[0].isdigit()
+        
     def borrow_book(self, library: Library, title: str) -> None:
         for book in library.list_available_books():
             if book.title == title:
@@ -144,7 +85,7 @@ def test_library_system():
     print("Доступные книги в библиотеке:")
     for book in library.list_available_books():
         print(book)
-        
+
     user = User("User")
 
     print("\nПользователь пытается взять книгу 'Идиот':")
