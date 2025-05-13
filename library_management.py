@@ -38,10 +38,10 @@ class Library:
                 return
         print(f'Книга {title} не найдена')
 
-    def find_book(self, title: str) -> None:   
+    def find_book(self, title: str) -> Book:   
         for book in self.library:
             if title == book.title:
-                return f'Книга {book.title} есть в библиотеке'        
+                return book       
         raise ValueError(f"Книга {title} отсутствует.")
     
     def list_books(self) -> list[Book]:
@@ -90,7 +90,7 @@ library.add_book(b1)
 library.add_book(b2)
 print(library)
 try:
-    library.find_book('Гранатовый браслет')
+    print(library.find_book('Гранатовый браслет'))
 except ValueError as e:
     print(e)
 try:
