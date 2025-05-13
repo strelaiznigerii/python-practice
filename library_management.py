@@ -44,7 +44,7 @@ class Library:
                 return f'Книга {book.title} есть в библиотеке'        
         raise ValueError(f"Книга {title} отсутствует.")
     
-    def list_books(self) -> str:
+    def list_books(self) -> list[Book]:
         return [book for book in self.library]
         
     def __str__(self) -> str:
@@ -63,7 +63,7 @@ class User:
                 if not book.available:
                     return f'Книгу {title} уже взяли'
                 self.borrowed_books.append(book)
-                book._available = False
+                book.available = False
                 return f'Книга {title} выдана'
         return f'Книга {title} отсутствует в библиотеке'
 
@@ -72,10 +72,10 @@ class User:
             if book.title == title:
                 if book in self.borrowed_books:               
                     self.borrowed_books.remove(book)
-                    book._available = True
+                    book.available = True
                     return f'Вы вернули книгу {title} в библиотеку'
-            else:
-                return f'Вы не брали книгу {title}'
+                else:
+                    return f'Вы не брали книгу {title}'
         return f'Книга {title} отсутствует в библиотеке'
 
     def __str__(self) -> str:
