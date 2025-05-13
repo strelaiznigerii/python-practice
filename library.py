@@ -35,12 +35,9 @@ class Library:
         return False        
     
     def __str__(self) -> str:
-        list_available_books = [book for book in self.list_available_books()]
-        if not list_available_books:
-            return 'Нет доступных книг.'
-        return '\n'.join(list_available_books)
-
-
+        available_books = self.list_available_books()
+        return '\n'.join(str(book) for book in available_books) if available_books else 'Нет доступных книг.' 
+        
 class User:
 
     def __init__(self, name: str, borrowed_books: list | None=None) -> None:
@@ -52,7 +49,7 @@ class User:
     @staticmethod
     def validate_name(name: str) -> bool:
         return len(name) >= 4 and not name[0].isdigit()
-        
+
     def borrow_book(self, library: Library, title: str) -> None:
         for book in library.list_available_books():
             if book.title == title:
