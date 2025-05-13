@@ -1,58 +1,3 @@
-"""
-🔹 Задача: Мини-библиотека
-
-Создай три класса:
-1. Book
-
-Представляет книгу.
-
-Атрибуты:
-
-    title (название)
-
-    author (автор)
-
-    year (год издания)
-
-    is_checked_out (флаг, выдана ли книга; по умолчанию — False)
-
-Методы:
-
-    __str__: возвращает строку вида "Название: ..., Автор: ..., Год: ..., В наличии: да/нет"
-
-2. Library
-
-Представляет библиотеку, в которой хранятся книги.
-
-Атрибуты:
-
-    books — список объектов Book
-
-Методы:
-
-    add_book(book: Book) — добавляет книгу в библиотеку.
-
-    list_available_books() — возвращает список только доступных книг.
-
-    checkout_book(title: str) — "выдаёт" книгу (меняет is_checked_out на True, если книга есть и не выдана).
-
-3. User
-
-Представляет пользователя, который может брать книги.
-
-Атрибуты:
-
-    name
-
-    borrowed_books — список книг, взятых этим пользователем.
-
-Методы:
-
-    borrow_book(library: Library, title: str) — пытается взять книгу из библиотеки.
-
-    list_borrowed_books() — список всех взятых книг.
-"""
-
 class Book:
     
     def __init__(
@@ -66,25 +11,21 @@ class Book:
         self.author = author
         self.year = year
         self.is_checked_out = is_checked_out
-    
+
     def __str__(self) -> str:
-        if not self.is_checked_out:
-            flag_checked_out = 'да'
-        else:
-            flag_checked_out = 'нет'
-        return f"Название: {self.title}, Автор: {self.author}, Год: {self.year}, В наличии: {flag_checked_out}"
+        return f"Название: {self.title}, Автор: {self.author}, Год: {self.year}, В наличии: {'да' if not self.is_checked_out else 'нет'}"
+    
         
 class Library:
     
     def __init__(self) -> None:
-        self.books = list()
+        self.books: list[Book] = []
 
     def add_book(self, book: Book) -> None:
         self.books.append(book)
 
-    def list_available_books(self) -> list:
+    def list_available_books(self) -> list[Book]:
         return [book for book in self.books if not book.is_checked_out]
-
     
     def checkout_book(self, title: str) -> bool:
         for book in self.books:
@@ -94,18 +35,21 @@ class Library:
         return False        
     
     def __str__(self) -> str:
-        list_available_books = [book for book in self.list_available_books()]
-        if not list_available_books:
-            return 'Нет доступных книг.'
-        return '\n'.join(list_available_books)
-
-
+        available_books = self.list_available_books()
+        return '\n'.join(str(book) for book in available_books) if available_books else 'Нет доступных книг.' 
+        
 class User:
 
-    def __init__(self, name: str, borrowed_books: list=None) -> None:
+    def __init__(self, name: str, borrowed_books: list | None=None) -> None:
+        if not self.validate_name(name):
+            raise ValueError("Имя пользователя должно быть не менее 4 знаков и не может начинаться с цифры.")
         self.name = name
-        self.borrowed_books = borrowed_books if borrowed_books is not None else []
+        self.borrowed_books = borrowed_books or []
     
+    @staticmethod
+    def validate_name(name: str) -> bool:
+        return len(name) >= 4 and not name[0].isdigit()
+
     def borrow_book(self, library: Library, title: str) -> None:
         for book in library.list_available_books():
             if book.title == title:
@@ -118,7 +62,7 @@ class User:
 
 
     def list_borrowed_books(self) -> list:
-        return [str(book) for book in self.borrowed_books]
+        return [book for book in self.borrowed_books]
     
     def __str__(self) -> str:
         if not self.borrowed_books:
@@ -136,26 +80,32 @@ def test_library_system():
     library.add_book(book3)
 
     print("Доступные книги в библиотеке:")
-    print(library.list_available_books())
+    for book in library.list_available_books():
+        print(book)
 
     user = User("User")
 
     print("\nПользователь пытается взять книгу 'Идиот':")
     print(user.borrow_book(library, "Идиот")) 
-    print(user.list_borrowed_books())
+    for book in user.list_borrowed_books():
+        print(book)
 
     print("\nДоступные книги после того, как пользователь взял книгу:")
-    print(library.list_available_books())
+    for book in library.list_available_books():
+        print(str(book))
 
     print("\nПользователь пытается взять книгу 'Преступление и наказание':")
     print(user.borrow_book(library, "Преступление и наказание"))  
-    print(user.list_borrowed_books())
+    for book in user.list_borrowed_books():
+        print(book)
 
     print(user.borrow_book(library, "Идиот"))  
-    print(user.list_borrowed_books())
+    for book in user.list_borrowed_books():
+        print(book)
 
     print("\nСписок всех взятых книг пользователем:")
-    print(user.list_borrowed_books())
+    for book in user.list_borrowed_books():
+        print(book)
 
 if __name__ == "__main__":
     test_library_system()
