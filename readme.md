@@ -8,7 +8,7 @@
 
 Next meeting - _21.05.2025_
 
-**extra 30.04.2025** :
+**extra 03.06.2025** :
 
 - [x] - fix feedback
-- [ ] - 2 tasks
+- [x] - 2 tasks
