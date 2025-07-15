@@ -25,26 +25,27 @@ class CartItem:
 
 @dataclass
 class ShoppingCart:
-    shoppingcart: list[CartItem] = field(default_factory=list)
-    _sum_of_order: int = 0
+    cart_items: list[CartItem] | None 
 
     def add_cart_item(self, cartitem: CartItem) -> None:
-       self.shoppingcart.append(cartitem)
+        if self.cart_items: 
+            self.cart_items.append(cartitem)
 
     def delete_cart_item(self, cartitem: CartItem) -> None:
-       self.shoppingcart.remove(cartitem)
-       self._sum_of_order -= cartitem.product.price * cartitem.quantity
+        if self.cart_items:
+            self.cart_items.remove(cartitem)
+        self._sum_of_order -= cartitem.product.price * cartitem.quantity
 
     @property
     def sum_of_order(self) -> int:
-        for item in self.shoppingcart:
+        for item in self.cart_items:
             self._sum_of_order += item.quantity * item.product.price
         return self._sum_of_order
     
     def __str__(self) -> str:
-        return '\nКорзина: ' + '\n'.join([str(item) for item in self.shoppingcart])
+        return '\nКорзина: ' + '\n'.join([str(item) for item in self.cart_items])
 
-@dataclass
+# TODO Добавить Enum в _order_status
 class Order:
     order: list[CartItem]    
     _order_status: str = 'created'
@@ -53,14 +54,6 @@ class Order:
     def order_status(self) -> str:
         return f'Статус заказа: {self._order_status}'
 
-    @order_status.setter
-    def order_status(self, status: str) -> None:
-        if self._order_status not in ['created', 'paid', 'shipped']:
-            raise UncorrectOrderStatus('Неверный статус заказа')
-        if self._order_status != 'created' and status == 'shipped':
-            raise OrderNotPaid('Заказ не оплачен')
-        self._order_status = status
-        
     def pay(self) -> None:
         self._order_status = 'paid'
 
@@ -99,4 +92,4 @@ if __name__ == "__main__":
     print(order.order_status)     
 
 
-
+# TODO Добавить Enum для статусов, переписать

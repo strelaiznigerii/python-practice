@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
-@dataclass
 class Animal(ABC):
     _name : str
     _species: str
@@ -40,7 +39,7 @@ class Animal(ABC):
 
 class Lion(Animal):
 
-    def init(self, _name: str, _species: str, _hungry_status: bool) -> None:
+    def __init__(self, _name: str, _species: str, _hungry_status: bool) -> None:
         super().__init__(_name, _species, _hungry_status)
 
     def make_sound(self) -> str:
@@ -48,7 +47,7 @@ class Lion(Animal):
 
 class Elephant(Animal):
 
-    def init(self, _name: str, _species: str, _hungry_status: bool) -> None:
+    def __init__(self, _name: str, _species: str, _hungry_status: bool) -> None:
         super().__init__(_name, _species, _hungry_status) 
 
     def make_sound(self) -> str:
@@ -56,13 +55,12 @@ class Elephant(Animal):
 
 class Monkey(Animal):
 
-    def init(self, _name: str, _species: str, _hungry_status: bool) -> None:
+    def __init__(self, _name: str, _species: str, _hungry_status: bool) -> None:
         super().__init__(_name, _species, _hungry_status)
 
     def make_sound(self):
         return 'Monkey\'s Whu-Whu-A-A'
 
-@dataclass
 class Zoo:
     zoo: list[Animal] = field(default_factory=list)
 
@@ -78,8 +76,8 @@ class Zoo:
         return [animal.make_sound() for animal in self.zoo] 
 
 if __name__ == '__main__':
-    l = Lion('Лев', 'Лев обыкновенный')
-    e = Elephant('Слон', 'Серый слон')
+    l = Lion('Лев', 'Лев обыкновенный', False)
+    e = Elephant('Слон', 'Серый слон', True)
     print(l.feed())
     print(l)
     print(e)

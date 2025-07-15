@@ -50,7 +50,7 @@ class User:
     def validate_name(name: str) -> bool:
         return len(name) >= 4 and not name[0].isdigit()
 
-    def borrow_book(self, library: Library, title: str) -> None:
+    def borrow_book(self, library: Library, title: str) -> str:
         for book in library.list_available_books():
             if book.title == title:
                 if book in self.borrowed_books:
