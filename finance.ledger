@@ -1,0 +1,706 @@
+; === Памятка (стандартная логика ledger) ===
+; 
+; Liabilities (обязательства) - это ДОЛГИ, показываются ОТРИЦАТЕЛЬНЫМИ
+; Чем больше отрицательное число = тем больше долг
+; 
+; Expenses (расходы) - всегда ПОЛОЖИТЕЛЬНЫЕ
+; Income (доходы) - всегда ОТРИЦАТЕЛЬНЫЕ (поступления)
+; Assets (активы) - положительные = есть деньги, отрицательные = нет денег
+;
+; Основное правило: каждая транзакция должна балансироваться (сумма = 0)
+
+; === Команды для анализа ===
+; ledger -f finance.ledger balance
+; ledger -f finance.ledger balance assets
+; ledger -f finance.ledger balance liabilities
+; ledger -f finance.ledger balance expenses
+; ledger -f finance.ledger register expenses
+; ledger -f finance.ledger balance --period "this month"
+
+; === Начальные балансы на 22.11.2025 ===
+2025/11/22 Opening Balance
+    liabilities:creditcard        -28545.05 RUB  ; долг по кредитке
+    assets:salarycard                  0.00 RUB  ; на зарплатной ничего не было
+    assets:savings                     0.00 RUB  ; накопительный счет пустой
+    assets:investment                  50.00 RUB  ; инвесткопилка пустая
+    assets:cash                      600.00 RUB  ; наличные было 600
+    equity:opening-balances
+
+; === Возврат от Кати (долг уменьшается) ===
+2025/11/22 Возврат от Кати
+    liabilities:creditcard          1472.00 RUB
+    income:refunds                  
+
+; === Траты 23 ноября (долг увеличивается) ===
+2025/11/23 Такси - отвез робот-пылесос
+    expenses:taxi                    377.00 RUB
+    liabilities:creditcard
+
+2025/11/23 Такси - домой от родителей
+    expenses:taxi                    320.00 RUB
+    liabilities:creditcard
+
+2025/11/23 Гаджеты
+    expenses:gadgets                  77.00 RUB
+    liabilities:creditcard
+
+2025/11/23 Транспорт
+    expenses:transport               100.00 RUB
+    liabilities:creditcard
+
+2025/11/23 Налог
+    expenses:nalog                   531.00 RUB
+    liabilities:creditcard
+
+2025/11/25 аптека + продукты
+    expenses:health   669.00 RUB
+    expenses:products   569.53 RUB
+    liabilities:creditcard
+
+2025/11/26 продукты
+    expenses:products   51.98 RUB
+    liabilities:creditcard
+
+2025/11/27 Льву на НГ подарок + продукты
+    expenses:gifts    2000.00 RUB
+    expenses:products   199.98 RUB
+    liabilities:creditcard
+
+2025/11/28 ЖКХ
+    expenses:housing    50.33 RUB
+    liabilities:creditcard
+
+2025/11/29 продукты
+    expenses:products   435.39 RUB
+    expenses:products   458.97 RUB
+    expenses:health    197.00 RUB
+    liabilities:creditcard
+
+2025/11/30 стрижка+подарок маме
+    expenses:beauty   800.00 RUB
+    expenses:gifts    850.00 RUB
+    liabilities:creditcard
+
+2025/11/30 День рождения подарки от мамы с папой, тети Светы с бабушкой, Эла
+    liabilities:creditcard    21000.00 RUB
+    income:gifts
+
+2025/11/30 поход в Монтесори
+    expenses:restaraunts    4864.00 RUB
+    liabilities:creditcard
+
+2025/12/01 оплата интернета+ТВ родителям
+    expenses:housing    1280.00 RUB
+    expenses:housing    419.38 RUB
+    expenses:products   373.97 RUB
+    expenses:repair   138.00 RUB
+    liabilities:creditcard
+
+2025/12/02 додо 
+    expenses:restaraunts    1255.00 RUB
+    liabilities:creditcard
+
+2025/12/03 зарплата
+    assets:salarycard   31412.77 RUB
+    income:salary
+
+2025/12/03 кэшбек кредитка
+    liabilities:creditcard    1655.00 RUB
+    income:cashback
+
+2025/12/03 погашение кк
+    liabilities:creditcard    20435.58 RUB
+    assets:salarycard
+
+2025/12/03 ипотека декабрь
+    expenses:mortgage    19000.00 RUB
+    liabilities:creditcard
+
+2025/12/03 Вода
+    expenses:products                 100 RUB
+    assets:salarycard
+
+; === Распределение остатка зарплаты ===
+2025/12/03 Перевод на накопительный
+    assets:savings                  2000.00 RUB
+    assets:salarycard
+
+2025/12/03 Перевод на инвесткопилку
+    assets:investment                977.19 RUB
+    assets:salarycard
+
+2025/12/03 Снял наличные
+    assets:cash                     2000.00 RUB
+    assets:salarycard
+
+2025/12/04 новогодние подарки
+    expenses:gifts    2069.00 RUB; 07.12 - возврат за увлажнитель 2171.00
+    liabilities:creditcard
+
+2025/12/04 жкх
+    expenses:housing    3939.79 RUB;омскэнергосбыт
+    expenses:housing    662.47 RUB;капремон;
+    expenses:housing    800.00 RUB;ростелеком
+    liabilities:creditcard
+
+2025/12/05 транспорт
+    expenses:transport    10.00 RUB
+    expenses:restaraunts    1650.00 RUB
+    assets:savings    50.00 RUB
+    assets:salarycard
+
+2025/12/06 подарки Боре и Даше, аромамасла маме с папой
+    expenses:gifts    908.00 RUB
+    expenses:products   559.98 RUB; энергетик и кофе
+    assets:savings    40.02 RUB
+    assets:salarycard
+
+2025/12/06 корм животным
+    expenses:restaraunts   829.00 RUB
+    liabilities:creditcard
+
+2025/12/06  подарок Кире на НГ
+    expenses:gifts    500.00 RUB
+    assets:cash
+
+2025/12/06 хлеб и округление
+    expenses:products   70.00 RUB
+    assets:savings    30.00 RUB
+    assets:salarycard
+
+2025/12/07 продукты
+    expenses:products   189.94 RUB
+    assets:savings    10.06 RUB
+    assets:salarycard
+
+2025/12/07 подарок Наташе + поход в лапшу
+    expenses:gifts    3145.00 RUB
+    expenses:restaraunts    1350.00 RUB
+    expenses:health   504.00 RUB
+    liabilities:creditcard
+
+2025/12/08 досрочное погашение кредита
+    expenses:loan   950.00 RUB
+    assets:salarycard
+
+2025/12/08 продукты
+    expenses:products   86.99 RUB
+    liabilities:creditcard
+
+2025/12/08 аксессуары для клавиатуры + ЖКХ
+    expenses:accessories    1220.00 RUB
+    expenses:housing    1569.88 RUB; Левобережье
+    liabilities:creditcard
+
+2025/12/09 погашение кредита
+   expenses:loan   24000.00 RUB
+   liabilities:creditcard
+
+2025/12/09 погашение кредита
+    expenses:loan   232.00 RUB
+    assets:salarycard
+
+2025/12/09 витамины
+    expenses:health    4894.00 RUB
+    liabilities:creditcard
+
+2025/12/10 озон
+    expenses:accessories   336.00 RUB; оринги и стопора для карниза 
+    expenses:gifts    426.00 RUB; пакеты для подарков
+    expenses:gifts    453.00 RUB; подарок Боре
+    expenses:restaraunts    825.00 RUB; пельмени в богатство сибири
+    expenses:accessories    163.00 RUB; не хватало на салфетку для гаджетов
+    liabilities:creditcard
+
+2025/12/10 продукты
+    expenses:products   189.68 RUB
+    assets:savings    10.32 RUB
+    assets:salarycard
+
+2025/12/11 подарок Саше РГ
+    expenses:gifts    500.00 RUB
+    liabilities:creditcard
+
+2025/12/11 поездка в транспорте
+    expenses:transport    38.00 RUB
+    liabilities:creditcard
+
+2025/12/11 премия
+    assets:salarycard   32228.00 RUB
+    income:salary
+
+2025/12/11 кальян + погашение кредита + на фин. подушку
+    expenses:loan   5000.00 RUB
+    liabilities:creditcard    20733.00 RUB
+    expenses:restaraunts    1650.00 RUB
+    expenses:transport    100.00 RUB
+    assets:savings    1478.00 RUB
+    assets:salarycard
+
+2025/12/11 кошелек в подарок Саше
+    expenses:gifts    267.00 RUB
+    assets:salarycard
+
+2025/12/12 продукты
+    expenses:products   232.97 RUB
+    expenses:products   299.97 RUB
+    assets:salarycard
+
+2025/12/12 округление
+    assets:savings    0.03 RUB
+    assets:savings    17.03 RUB
+    assets:salarycard
+
+2025/12/13 поход в cheese-knock
+    expenses:restaraunts    2310.00 RUB
+    liabilities:creditcard
+
+2025/12/13 подарок Саше на НГ
+    expenses:gifts    100.00 RUB
+    assets:cash
+
+2025/12/13 поход в монтесори
+    expenses:restaraunts    1650.00 RUB
+    assets:savings    50.00 RUB
+    assets:salarycard
+
+2025/12/14 возврат от Кати
+    income:refunds    -1363.00 RUB
+    liabilities:creditcard
+
+2025/12/14 еда в меге и такси
+    expenses:restaraunts    510.00 RUB; Skuratov
+    expenses:restaraunts    650.00 RUB; Cinnabon
+    expenses:taxi   197.00 RUB
+    expenses:transport    90.00 RUB; проезд в 212
+    liabilities:creditcard
+
+2025/12/14 продукты, проезд
+    expenses:transport    110.00 RUB; на омку
+    expenses:products     891.95 RUB
+    assets:savings    8.05 RUB
+    assets:salarycard
+
+2025/12/15 аккум, наклейки для mx master 3
+    expenses:accessories    893.00 RUB
+    liabilities:creditcard
+
+2025/12/15 пополнение счета под ключ
+    assets:investment   740.00 RUB
+    assets:salarycard
+
+2025/12/15 зарплата
+    assets:salarycard   29840.47 RUB
+    income:salary
+
+2025/12/15 погашение кредитки
+    liabilities:creditcard    25544.13 RUB
+    assets:salarycard
+
+2025/12/15 покупка комплектующих для мышки
+    expenses:subscription   179.00 RUB; диакласс для новогоднего квиза
+    liabilities:creditcard
+
+2025/12/16 подарок Наташе
+    expenses:gifts    1579.00 RUB
+    assets:savings    21.00 RUB
+    assets:salarycard
+
+2025/12/16 чай в энитайме
+    expenses:restaraunts    190.00 RUB
+    liabilities:creditcard
+
+2025/12/17 энергетики в самокате
+    expenses:products   456.00 RUB
+    assets:savings    44.00 RUB
+    assets:salarycard
+
+2025/12/17 продукты, накоп, благотворительность
+    expenses:products   72.99 RUB
+    assets:savings    27.01 RUB
+    expenses:charity    300.00 RUB
+    expenses:housing    3.08 RUB
+    liabilities:creditcard    190.00 RUB
+    assets:savings    103.26 RUB
+    assets:salarycard
+
+2025/12/18 годовой бонус
+    assets:salarycard   71619.45 RUB
+    income:salary
+
+2025/12/18 перевод в накоп, обязательные платежи, погашение кредитки
+    assets:mandatory_expenses   33000.00 RUB
+    assets:savings    20000.00 RUB
+    liabilities:creditcard    14000.00 RUB
+    assets:salarycard
+
+2025/12/19 заказы на озоне, такси и кальян
+    expenses:accessories   688.00 RUB
+    expenses:repair   507.00 RUB; оплетка для кабелей + термоусадки
+    expenses:repair   1043.00 RUB; восстановление кресел-мешков
+    expenses:taxi   240.00 RUB
+    expenses:restaraunts    1650.00 RUB
+    assets:savings    50.00 RUB
+    assets:salarycard
+
+2025/12/20 перевод между счетами
+    assets:salarycard   6999.00 RUB
+    assets:salarycard   2001.00 RUB
+    assets:mandatory_expenses
+
+2025/12/20 обувь, продукты
+    expenses:shoes    6999.00 RUB
+    assets:savings    1.00 RUB
+    expenses:products   199.98 RUB
+    expenses:products   2580.84 RUB
+    assets:savings    293.17 RUB
+    assets:salarycard
+
+2025/12/21 такси, пуховик
+    assets:salarycard   6000.00 RUB
+    assets:mandatory_expenses
+
+2025/12/21 такси, пуховик
+    expenses:clothes    4499.00 RUB
+    expenses:products   372.00 RUB; кофе
+    expenses:taxi   287.00 RUB
+    assets:savings    1.00 RUB
+    assets:salarycard
+
+2025/12/21 погашение кредитки
+    liabilities:creditcard    10000.00 RUB
+    assets:mandatory_expenses
+
+2025/12/21 подарки и вкусняшки bombbar/snaqfer
+    expenses:gifts    2409.00 RUB
+    assets:mandatory_expenses
+
+2025/12/23 подарок Кире - пополнение Стим
+    expenses:gifts  52.50 RUB
+    expenses:gifts  735.00 RUB
+    assets:savings    112.50 RUB
+    assets:salarycard
+
+2025/12/23 фильтры для воды
+    expenses:health   1739.00 RUB
+    assets:salarycard   2852.00 RUB 
+    assets:mandatory_expenses
+
+2025/12/24 такси
+    expenses:taxi   250.00 RUB
+    assets:salarycard
+
+2025/12/24 кэшбек
+    assets:savings    1519.05 RUB    
+    assets:salarycard   175.31 RUB
+    income:cashback
+
+2025/12/25 продукты, кофе
+    expenses:products   2223.76 RUB
+    assets:savings    9.00 RUB
+    assets:savings    62.01 RUB
+    expenses:restaraunts    210.00 RUB; Skuratov декаф
+    assets:savings    40.00 RUB
+    assets:salarycard
+
+2025/12/26 зарплата декабрь
+    assets:salarycard   29840.48 RUB
+    income:salary
+
+2025/12/26 перевод на накоп
+    assets:mandatory_expenses   22000.00 RUB
+    assets:salarycard
+
+2025/12/26 продукты
+    expenses:products   99.99 RUB; семечки в 5ке
+    assets:savings    0.01 RUB
+    assets:salarycard
+
+2025/12/27 кэш на карту
+    assets:salarycard   1000.00 RUB
+    assets:cash
+
+2025/12/27 стрижка, транспорт, накоп, кфс, аптека
+    expenses:transport    200.00 RUB
+    assets:savings    570.00 RUB
+    expenses:beauty   1900.00 RUB
+    expenses:restaraunts    259.00 RUB
+    expenses:health   912.00 RUB
+    assets:salarycard
+
+2025/12/28 алкоголь к НГ и напитки
+    expenses:alcohol    2987.97 RUB
+    expenses:alcohol    548.95 RUB
+    expenses:alcohol    439.99 RUB
+    assets:savings    123.09 RUB
+    expenses:pets   126.00 RUB
+    assets:salarycard
+
+2025/12/29 продукты
+    expenses:products   770.92 RUB
+    expenses:products   503.91 RUB
+    assets:savings    96.09 RUB
+    assets:savings    29.08 RUB
+    expenses:housing    50.33 RUB; то вкго
+    assets:salarycard
+
+2025/12/30 перевод между счетами
+    assets:salarycard   3000.00 RUB
+    assets:mandatory_expenses
+
+2025/12/30 поход в монтесори
+    expenses:restaraunts    3130.00 RUB
+    assets:savings    70.00 RUB
+    assets:salarycard
+
+2025/12/30 возврат от Кати
+    assets:salarycard   500.00 RUB
+    income:refunds
+
+2025/12/31 продукты
+    expenses:products   289.98 RUB
+    expenses:transport    76.00 RUB
+    assets:savings    14.02 RUB
+    assets:salarycard
+
+2025/12/31 возвраты
+    assets:salarycard   1475.00 RUB; Катя за НГ
+    income:refunds
+
+2026/01/01 подарок от родителей
+    assets:mandatory_expenses   4000.00 RUB
+    assets:salarycard   1000.00 RUB
+    income:gifts
+
+2026/01/01 жкх
+    expenses:housing    4138.73 RUB; отопление, гвс, э/э
+    liabilities:creditcard
+
+2026/01/02 перевод на кредитку
+    liabilities:creditcard    4138.73 RUB
+    assets:mandatory_expenses
+
+2026/01/02 проценты на остаток
+    assets:mandatory_expenses   65.37 RUB
+    income:cashback   
+
+2026/01/02 отмена холлофайбера
+    assets:salarycard   883.00 RUB
+    income:refunds
+
+2026/01/02 поход в cheese-knock
+    expenses:restaraunts    1390.00 RUB
+    assets:savings    10.00 RUB
+    assets:salarycard
+
+2026/01/03 кэшбек кредитки
+    assets:salarycard   350.00 RUB
+    income:cashback
+
+2026/01/03 оплата впн
+    expenses:subscription   957.20 RUB
+    assets:savings    42.80 RUB
+    assets:salarycard
+
+2026/01/04 перевод со счета под ключ на Т
+    assets:salarycard   1780.00 RUB
+    assets:investment   -1780.00 RUB
+    assets:salarycard   1000.00 RUB
+    assets:mandatory_expenses   -1000.00 RUB
+
+2026/01/04 оплата жкх
+    expenses:housing    545.80 RUB; водоканал
+    expenses:housing    688.95 RUB; рфкр
+    expenses:housing    1980.85 RUB; УК Левобережье
+    assets:savings    11.05 RUB
+    expenses:restaraunts    805.00 RUB
+    expenses:transport    110.00 RUB; омка
+    assets:savings    40.00 RUB
+    assets:salarycard
+
+2026/01/05 перевод между счетами
+    assets:salarycard   2500.00 RUB
+    assets:mandatory_expenses
+    
+2026/01/05 поход в монтесори
+    expenses:restaraunts    1650.00 RUB
+    expenses:taxi   281.00 RUB
+    expenses:taxi   515.00 RUB
+    assets:savings    50.00 RUB
+    assets:salarycard 
+
+2026/01/05 проценты на остаток
+    assets:savings    131.10 RUB
+    income:cashback 
+
+2026/01/06 подарок папе на др
+    expenses:gifts    10297.00 RUB
+    assets:savings
+
+2026/01/06 транспорт
+    expenses:transport    90.00 RUB
+    assets:salarycard
+
+2026/01/06 между счетами
+    assets:salarycard   1000.00 RUB
+    assets:mandatory_expenses
+
+2026/01/06 водоканал
+    expenses:housing    556.60 RUB
+    assets:savings    43.40 RUB
+    assets:salarycard
+
+2026/01/06 омка Наташе  
+    expenses:transport    500.00 RUB
+    assets:cash
+
+2026/01/07 перевод между счетами
+    assets:salarycard   2500.00 RUB
+    assets:mandatory_expenses
+
+2026/01/07 лаваш и монтесори
+    expenses:restaraunts    1650.00 RUB
+    expenses:restaraunts    210.00 RUB
+    assets:savings    90.00 RUB
+    assets:salarycard
+
+2026/01/08 перевод между счетами
+    assets:salarycard   2500.00 RUB
+    assets:salarycard   1500.00 RUB
+    assets:mandatory_expenses
+
+2026/01/08 монтесори, рамен, аптека
+    expenses:health   666.00 RUB;презервативы
+    assets:savings    34.00 RUB
+    expenses:restaraunts    1007.00 RUB
+    assets:savings    93.00 RUB
+    expenses:restaraunts    2450.00 RUB
+    assets:savings    50.00 RUB
+    assets:salarycard
+
+2026/01/09 перевод между счетами
+    assets:mandatory_expenses   14073.36 RUB
+    assets:savings
+
+2026/01/09 перевод между счетами
+    assets:salarycard   23000.00 RUB
+    assets:mandatory_expenses
+
+2026/01/09 погашение кредита
+    expenses:loan   22410.00 RUB; регулярный платеж
+    expenses:loan   1244.50 RUB; досрочное
+    expenses:loan   627.47 RUB
+    assets:salarycard
+
+2026/01/09 перевод между счетами
+    assets:salarycard   1627.47 RUB
+    assets:savings
+
+2026/01/09 омка
+    expenses:transport    120.00 RUB
+    assets:savings    30.00 RUB
+    assets:salarycard
+
+2026/01/09 перевод между счетами
+    assets:salarycard   1000.00 RUB
+    assets:salarycard   530.00 RUB
+    assets:savings
+
+2026/01/09 кальян и лаваш
+    expenses:restaraunts    580.00 RUB
+    assets:savings    50.00 RUB
+    expenses:restaraunts    550.00 RUB; с Димой кальян
+    expenses:transport    130.00 RUB
+    assets:savings    20.00 RUB
+    assets:salarycard
+
+2026/01/10 додо
+    expenses:restaraunts    909.00 RUB
+    assets:savings    91.00 RUB
+    assets:salarycard
+
+2026/01/11 продукты
+    expenses:products   2215.12 RUB
+    liabilities:creditcard
+
+2026/01/11 Наташа вернула за продукты
+    liabilities:creditcard    2215.12 RUB
+    income:refunds
+
+2026/01/11 монтесори
+    expenses:restaraunts    1650.00 RUB
+    liabilities:creditcard
+
+2026/01/13 премия
+    assets:salarycard   32228.00 RUB
+    income:salary
+
+2026/01/13 перевод между счетами
+    assets:mandatory_expenses   15000.00 RUB
+    assets:savings    10000.00 RUB
+    liabilities:creditcard    1650.00 RUB
+    expenses:products   127.49 RUB
+    expenses:products   549.96 RUB
+    assets:savings    72.55 RUB
+    assets:salarycard
+
+2026/01/14 ростикс
+    expenses:restaraunts    662.00 RUB
+    assets:savings    38.00 RUB
+    assets:salarycard
+
+2026/01/15 подарок Льву
+    expenses:gifts    3000.00 RUB
+    assets:mandatory_expenses
+
+2026/01/15 монтесори и cheese-knock
+    expenses:restaraunts    1190.00 RUB
+    expenses:restaraunts    1650.00 RUB
+    assets:savings    150.00 RUB
+    assets:salarycard
+
+2026/01/16 японский домик и монтесори
+    expenses:restaraunts    1518.00 RUB
+    expenses:restaraunts    1650.00 RUB
+    assets:salarycard
+
+2026/01/16 зарплата
+    assets:salarycard   15915.59 RUB
+    income:salary
+
+2026/01/16 перевод между счетами
+    assets:savings    5103.59 RUB
+    assets:mandatory_expenses   7000.00 RUB
+    assets:salarycard
+
+2026/01/17 возврат от Кати
+    assets:salarycard   1056.00 RUB
+    income:refunds
+
+2026/01/17 оплата жкх, интернета
+    expenses:housing    135.47 RUB; газ
+    expenses:housing    136.00 RUB; домофон
+    expenses:housing    800.00 RUB; ростелеком дом
+    expenses:housing    725.00 RUB; интернет родителям
+    expenses:transport    320.00 RUB
+    assets:savings    315.53 RUB
+    assets:salarycard
+
+2026/01/17 Наташа наличку дала
+    assets:cash   100.00 RUB
+    income:gifts
+
+2026/01/18 перевод между счетами
+    assets:salarycard   2500.00 RUB
+    assets:mandatory_expenses
+
+2026/01/18 оплата vps, монтесори
+    expenses:subscription   259.00 RUB
+    expenses:restaraunts    1650.00 RUB
+    assets:savings    91.00 RUB
+    assets:salarycard
+
+2026/01/19 продукты
+    expenses:products   604.93 RUB
+    assets:savings    95.07 RUB
+    assets:salarycard
